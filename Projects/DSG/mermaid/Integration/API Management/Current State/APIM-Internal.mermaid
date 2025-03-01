@@ -1,0 +1,143 @@
+flowchart TB
+    %% Define color classes
+    classDef azure fill:#0078D4,color:white,stroke:#005999,stroke-width:2px
+    classDef apim fill:#0078D4,color:white,stroke:#005b9f,stroke-width:3px
+    classDef vnet fill:#00BCF2,color:white,stroke:#008ac6,stroke-width:2px
+    classDef internet fill:#7FBA00,color:white,stroke:#5a8500,stroke-width:2px
+    classDef backend fill:#A4262C,color:white,stroke:#821e24,stroke-width:2px
+    classDef endpoint fill:#00A88F,color:white,stroke:#00806c,stroke-width:2px
+    classDef internal fill:#8661C5,color:white,stroke:#6e52a1,stroke-width:3px
+    classDef f5 fill:#F25022,color:white,stroke:#c13e1b,stroke-width:3px
+    classDef dns fill:#FFB900,color:black,stroke:#d99c00,stroke-width:2px
+    classDef nsg fill:#8661C5,color:white,stroke:#6e52a1,stroke-width:3px
+    classDef note fill:#FFC83D,color:black,stroke:#d1a000,stroke-width:1px,stroke-dasharray:5 5
+    classDef redline stroke:#FF0000,color:black,stroke-width:2px
+    classDef blueline stroke:#0000FF,color:black,stroke-width:2px
+    classDef navyline stroke:#000080,color:black,stroke-width:2px
+    classDef purpleline stroke:#800080,color:black,stroke-width:2px
+    
+    %% Retail Store Private Network
+    subgraph RetailStore["Retail Store Private Network"]
+        pdt["PDT Device launches storeapp1.ext.dcsg.com"]:::internal
+        storeDNS["Private DNS dcsg.com"]:::dns
+    end
+    
+    %% Enterprise Network 
+    subgraph Enterprise["DSG Enterprise Network"]
+        internalUsers["Internal System or Teammate"]:::internal
+        corpResources["Corporate Resources"]:::backend
+        
+        subgraph F5Services["F5 Services"]
+            f5GTM["F5 Global Traffic Manager api.dcsg.com"]:::f5
+            corpDNS["Corporate DNS"]:::dns
+        end
+    end
+    
+    %% Azure East US Infrastructure
+    subgraph EastUS["Azure East US - Subscription Security Zone"]
+        subgraph VNetHub["VNet Hub as Virtual WAN/Hub"]
+            expressRoute["Express Route Gateway to DSG Enterprise Network"]:::vnet
+        end
+        
+        subgraph InternalVNet["Internal VNet Spoke"]
+            subgraph APIMSubnet["APIM Subnet"]
+                apim["dsg-apim-internal-dev (Internal Mode)"]:::apim
+                privateIP["Private IP: 10.176.254.196"]:::internal
+            end
+            
+            privateDNS["Private DNS dcsg.com"]:::dns
+        end
+        
+        subgraph ResourceSubnets["Resource Subnets"]
+            backends["Internal Backend Services"]:::backend
+        end
+    end
+    
+    %% Store connections
+    pdt -.-|"1. DNS Request"|storeDNS
+    storeDNS -.-|"2. DNS Resolution"|f5GTM
+    pdt ---->|"3. Direct connection to APIM"|apim
+    
+    %% DNS Resolution Flow
+    internalUsers -.-|"1. DNS Request"|corpDNS
+    corpDNS -.-|"2. DNS Resolution"|f5GTM
+    
+    %% Client Request Flow
+    internalUsers ---->|"3. Client Request"|f5GTM
+    f5GTM ---->|"4. Route to Regional APIM"|expressRoute
+    
+    %% Proxied Connection
+    expressRoute -.->|"5. Proxied Connection"|VNetHub
+    VNetHub -.->|"6. Proxied Connection"|InternalVNet
+    InternalVNet -.->|"7. Proxied Connection"|apim
+    
+    %% Internal proxied connection from APIM to Backends
+    apim -.->|"8. Proxy HTTPS"|backends
+    
+    %% VNet peering connections
+    InternalVNet -.->|"Peered connection"|VNetHub
+    ResourceSubnets -.->|"Peered connection"|VNetHub
+    
+    %% Hub connections
+    VNetHub -.->|"ExpressRoute connection"|Enterprise
+    
+    %% Enhanced legend with correct line types and colors
+    subgraph DiagramLegend["Connection Types Legend"]
+        subgraph ConnectionTypes["Connection Types"]
+            dns_req["DNS Request"]:::dns
+            dns_path["DNS Resolution Path"]:::note
+            dns_req -.-|"DNS Resolution (-.-)"| dns_path
+            
+            client_req["Client Request"]:::internal
+            direct_path["Direct Connection Path"]:::note
+            client_req ---->|"Direct Connection (---->)"| direct_path
+            
+            proxy_req["Backend Request"]:::apim
+            backend_path["Backend Connection"]:::note
+            proxy_req -.->|"Proxied Connection (-.->)"| backend_path
+            
+            vnet_source["VNet Resource"]:::vnet
+            vnet_target["Connected Resource"]:::vnet
+            vnet_source -.->|"Network Peering (-.->)"| vnet_target
+        end
+        
+        subgraph ColorCodes["Resource Types"]
+            direction TB
+            internal_res["PDT/Internal Systems"]:::internal
+            azure_res["Azure Resources"]:::azure
+            f5_res["F5 Services"]:::f5
+            dns_res["DNS Services"]:::dns
+            backend_res["Backend Services"]:::backend
+            vnet_res["Network Resources"]:::vnet
+            apim_res["API Management"]:::apim
+        end
+    end
+    
+    %% Network configuration details
+    subgraph ConfigDetails["Current State Network Configuration"]
+        apimConfig["APIM Configuration:
+        Name: dsg-apim-internal-dev
+        VirtualNetworkType: Internal
+        Tier: Developer with 1 unit
+        Private IP: 10.176.254.196
+        Subnet: snet-enterpriseservices-gen-int-apim-np-ue-01
+        Domain: storeapp1.ext.dcsg.com"]:::note
+        
+        trafficFlow["Retail Store Traffic Flow:
+        1. PDT launches storeapp1.ext.dcsg.com
+        2. Internal DNS resolves forwarding to F5 GTM 
+        3. GTM resolves it to east internal APIM
+        4. PDT connects direct to internal APIM
+        5. Internal APIM proxies to backend (using PDT IP)"]:::note
+        
+        benefits["Key Benefits:
+        • Keeps all information and traffic private
+        • PDT communicates direct to internal APIM
+        • No public internet exposure
+        • Secure end-to-end connection"]:::note
+    end
+    
+    %% Apply classes
+    class EastUS azure
+    class Enterprise internal
+    class RetailStore internal

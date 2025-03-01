@@ -1,0 +1,128 @@
+flowchart TB
+    %% Define enhanced color classes with better color contrast
+    classDef azure fill:#0078D4,color:white,stroke:#005999,stroke-width:2px
+    classDef apim fill:#0078D4,color:white,stroke:#005b9f,stroke-width:3px
+    classDef vnet fill:#00BCF2,color:white,stroke:#008ac6,stroke-width:2px
+    classDef internet fill:#7FBA00,color:white,stroke:#5a8500,stroke-width:2px
+    classDef backend fill:#A4262C,color:white,stroke:#821e24,stroke-width:2px
+    classDef endpoint fill:#00A88F,color:white,stroke:#00806c,stroke-width:2px
+    classDef akamai fill:#F25022,color:white,stroke:#c13e1b,stroke-width:3px
+    classDef dns fill:#FFB900,color:black,stroke:#d99c00,stroke-width:2px
+    classDef nsg fill:#8661C5,color:white,stroke:#6e52a1,stroke-width:3px
+    classDef lb fill:#50E6FF,color:black,stroke:#28c7ea,stroke-width:2px
+    classDef note fill:#FFC83D,color:black,stroke:#d1a000,stroke-width:1px,stroke-dasharray: 5 5
+
+    %% External Access Layer
+    subgraph ExternalLayer["🌐 External Access Layer"]
+        direction TB
+        internet["🌐 Internet"]:::internet
+        externalSystems["👥 External System or\nAthlete/Teammate"]:::internet
+        
+        subgraph AkamaiServices["Akamai Cloud Services"]
+            direction TB
+            akamai["🔐 Akamai Edge\n(caching, regional load balancing)"]:::akamai
+            waf["🛡️ Web Application Firewall\n(threat protection)"]:::akamai
+        end
+        
+        dns["🔍 Public DNS\n(resolves URLs to Akamai)"]:::dns
+    end
+    
+    %% Azure East US Infrastructure
+    subgraph EastUS["🌩️ Azure East US - Subscription Security Zone"]
+        direction TB
+        
+        subgraph ExternalVNet["External VNet Spoke"]
+            direction TB
+            
+            subgraph APIMSubnet["APIM Subnet"]
+                direction TB
+                apim["🔐 dsg-apim-prod\n(Premium, 2 units)"]:::apim
+                publicIP["📡 Public IP\n(auto-deployed with external mode)"]:::endpoint
+                extLB["⚖️ External Load Balancer\n(auto-deployed with external mode)"]:::lb
+            end
+            
+            nsg["🛡️ NSG\n(Network Security Group)"]:::nsg
+            routeTable["🛣️ Route Table\n(RFC1918 routes to virtual appliance)"]:::vnet
+        end
+        å
+        subgraph VNetHub["VNet Hub as Virtual WAN/Hub"]
+            expressRoute["🔄 Express Route Gateway\nto DSG Enterprise Network"]:::vnet
+            firewall["🔥 Azure Firewall"]:::nsg
+        end
+        
+        subgraph ResourceSubnets["Resource Subnets"]
+            backends["🏢 Backend Services\n(APIs, Microservices)"]:::backend
+        end
+    end
+    
+    %% Enterprise Network
+    subgraph Enterprise["DSG Enterprise Network"]
+        corpResources["🏢 Corporate Resources"]:::backend
+    end
+    
+    %% Connection flows with color-coded paths
+    %% DNS Resolution Flow (red dotted)
+    externalSystems -.-|"1. DNS Resolution\n(red dotted)"| dns
+    
+    %% External proxied connection (purple dotted)
+    externalSystems -->|"2. Client Request\n(purple dotted)"| internet
+    internet -->|"3. External proxied\nconnection"| AkamaiServices
+    AkamaiServices -->|"4. WAF-filtered\ntraffic"| publicIP
+    publicIP -->|"5. Load balanced\ntraffic"| extLB
+    extLB -->|"6. Route to APIM"| apim
+    
+    %% NSG Security
+    apim -.->|"Traffic filtered by"| nsg
+    nsg -.->|"Routes defined in"| routeTable
+    
+    %% Internal proxied connection (green dotted)
+    apim -->|"7. Internal proxied\nconnection\n(green dotted)"| ResourceSubnets
+    ResourceSubnets -->|"8. Access backend\nservices"| backends
+    
+    %% Hub connections with more detail
+    ExternalVNet -.->|"Peered connection"| VNetHub
+    ResourceSubnets -.->|"Peered connection"| VNetHub
+    VNetHub -.->|"ExpressRoute\nconnection"| Enterprise
+    firewall -.->|"Inspects traffic\nbetween zones"| VNetHub
+    
+    %% Create a subgraph for detailed configuration
+    subgraph ConfigDetails["Detailed Configuration Information"]
+        direction TB
+        
+        nsgDetails["🛡️ NSG Configuration (Priority):
+        Inbound:
+        • 100: Port 3443 TCP - API Management
+        • 110: Ports 80,443 TCP - Client Communications
+        • 65000: Allow VNet Inbound
+        • 65001: Allow Azure Load Balancer Inbound
+        • 65500: Deny All Other Inbound
+        
+        Outbound:
+        • 65000: Allow VNet Outbound
+        • 65001: Allow Internet Outbound
+        • 65500: Deny All Other Outbound"]:::note
+        
+        routeConfig["🛣️ Route Table Configuration:
+        • rt-default-enterpriseservices-gen-qa-ue-01 (0.0.0.0/0) → Internet
+        • rt-rfc1918-10-8-enterpriseservices-gen-qa-ue-01 (10.0.0.0/8) → Virtual appliance (10.175.11.4)
+        • rt-rfc1918-172-16-12-enterpriseservices-gen-qa-ue-01 (172.16.0.0/12) → Virtual appliance (10.175.11.4)
+        • rt-rfc1918-192-168-16-enterpriseservices-gen-qa-ue-01 (192.168.0.0/16) → Virtual appliance (10.175.11.4)"]:::note
+        
+        apimConfig["⚙️ APIM Configuration:
+        • External mode with NSG protection
+        • Premium tier with 2 capacity units
+        • System-assigned managed identity
+        • Public endpoints with required hostnames
+        • Load balancing to backends with round robin support"]:::note
+        
+        architectureNotes["📝 Implementation Notes:
+        • Ingress into APIM must run through Akamai
+        • Ingress access control to external APIM managed with NSG
+        • For inbound rules: create IP group called ipgrp-apimexthosts-ue-np and replace internet as source
+        • For outbound rules: add RFC1918 rules and deny all after"]:::note
+    end
+    
+    %% Apply classes
+    class ExternalLayer internet
+    class EastUS azure
+    class Enterprise backend

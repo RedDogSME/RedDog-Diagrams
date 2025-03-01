@@ -1,0 +1,294 @@
+<mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" background="#ffffff">
+  <root>
+    <!-- Default parent cells -->
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- External Access Layer (Subgraph) -->
+    <mxCell id="2" value="🌐 External Access Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#999999;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="50" y="50" width="400" height="300" as="geometry" />
+    </mxCell>
+
+    <!-- Internet -->
+    <mxCell id="3" value="🌐 Internet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7FBA00;strokeColor=#5a8500;strokeWidth=2;" vertex="1" parent="2">
+      <mxGeometry x="100" y="100" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- External Systems -->
+    <mxCell id="4" value="👥 External System or\nAthlete/Teammate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7FBA00;strokeColor=#5a8500;strokeWidth=2;" vertex="1" parent="2">
+      <mxGeometry x="100" y="200" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Akamai Cloud Services (Subgraph) -->
+    <mxCell id="5" value="Akamai Cloud Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#999999;strokeWidth=2;" vertex="1" parent="2">
+      <mxGeometry x="250" y="100" width="150" height="180" as="geometry" />
+    </mxCell>
+
+    <!-- Akamai Edge -->
+    <mxCell id="6" value="🔐 Akamai Edge\n(caching, regional load balancing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F25022;strokeColor=#c13e1b;strokeWidth=3;" vertex="1" parent="5">
+      <mxGeometry x="50" y="50" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- WAF -->
+    <mxCell id="7" value="🛡️ Web Application Firewall\n(threat protection)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F25022;strokeColor=#c13e1b;strokeWidth=3;" vertex="1" parent="5">
+      <mxGeometry x="50" y="150" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Public DNS -->
+    <mxCell id="8" value="🔍 Public DNS\n(resolves URLs to Akamai)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFB900;strokeColor=#d99c00;strokeWidth=2;" vertex="1" parent="2">
+      <mxGeometry x="100" y="300" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Azure East US - Subscription Security Zone (Subgraph) -->
+    <mxCell id="9" value="🌩️ Azure East US - Subscription Security Zone" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="500" y="50" width="800" height="600" as="geometry" />
+    </mxCell>
+
+    <!-- External VNet Spoke (Subgraph) -->
+    <mxCell id="10" value="External VNet Spoke" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f0ff;strokeColor=#4d7cb9;strokeWidth=2;" vertex="1" parent="9">
+      <mxGeometry x="50" y="50" width="350" height="400" as="geometry" />
+    </mxCell>
+
+    <!-- APIM Subnet (Subgraph) -->
+    <mxCell id="11" value="APIM Subnet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f0ff;strokeColor=#4d7cb9;strokeWidth=2;" vertex="1" parent="10">
+      <mxGeometry x="50" y="50" width="250" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- APIM -->
+    <mxCell id="12" value="🔐 dsg-apim-prod\n(Premium, 2 units)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0078D4;strokeColor=#005b9f;strokeWidth=3;" vertex="1" parent="11">
+      <mxGeometry x="50" y="50" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Public IP -->
+    <mxCell id="13" value="📡 Public IP\n(auto-deployed with external mode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00A88F;strokeColor=#00806c;strokeWidth=2;" vertex="1" parent="11">
+      <mxGeometry x="50" y="150" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- External Load Balancer -->
+    <mxCell id="14" value="⚖️ External Load Balancer\n(auto-deployed with external mode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E6FF;strokeColor=#28c7ea;strokeWidth=2;" vertex="1" parent="11">
+      <mxGeometry x="50" y="250" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- NSG -->
+    <mxCell id="15" value="🛡️ NSG\n(Network Security Group)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8661C5;strokeColor=#6e52a1;strokeWidth=3;" vertex="1" parent="10">
+      <mxGeometry x="200" y="50" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Route Table -->
+    <mxCell id="16" value="🛣️ Route Table\n(RFC1918 routes to virtual appliance)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00BCF2;strokeColor=#008ac6;strokeWidth=2;" vertex="1" parent="10">
+      <mxGeometry x="200" y="150" width="150" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- VNet Hub as Virtual WAN/Hub (Subgraph) -->
+    <mxCell id="17" value="VNet Hub as Virtual WAN/Hub" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f0ff;strokeColor=#4d7cb9;strokeWidth=2;" vertex="1" parent="9">
+      <mxGeometry x="450" y="50" width="300" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Express Route Gateway -->
+    <mxCell id="18" value="🔄 Express Route Gateway\nto DSG Enterprise Network" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00BCF2;strokeColor=#008ac6;strokeWidth=2;" vertex="1" parent="17">
+      <mxGeometry x="50" y="50" width="200" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Azure Firewall -->
+    <mxCell id="19" value="🔥 Azure Firewall" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8661C5;strokeColor=#6e52a1;strokeWidth=3;" vertex="1" parent="17">
+      <mxGeometry x="50" y="150" width="200" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Resource Subnets (Subgraph) -->
+    <mxCell id="20" value="Resource Subnets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f0ff;strokeColor=#4d7cb9;strokeWidth=2;" vertex="1" parent="9">
+      <mxGeometry x="50" y="300" width="350" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Backend Services -->
+    <mxCell id="21" value="🏢 Backend Services\n(APIs, Microservices)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A4262C;strokeColor=#821e24;strokeWidth=2;" vertex="1" parent="20">
+      <mxGeometry x="50" y="50" width="200" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- DSG Enterprise Network (Subgraph) -->
+    <mxCell id="22" value="DSG Enterprise Network" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0e0e0;strokeColor=#821e24;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="1300" y="50" width="400" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Corporate Resources -->
+    <mxCell id="23" value="🏢 Corporate Resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A4262C;strokeColor=#821e24;strokeWidth=2;" vertex="1" parent="22">
+      <mxGeometry x="50" y="50" width="200" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ConfigDetails (Subgraph) -->
+    <mxCell id="24" value="Detailed Configuration Information" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#999999;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="50" y="700" width="1650" height="300" as="geometry" />
+    </mxCell>
+
+    <!-- NSG Configuration -->
+    <mxCell id="25" value="🛡️ NSG Configuration (Priority):
+        Inbound:
+        • 100: Port 3443 TCP - API Management
+        • 110: Ports 80,443 TCP - Client Communications
+        • 65000: Allow VNet Inbound
+        • 65001: Allow Azure Load Balancer Inbound
+        • 65500: Deny All Other Inbound
+        
+        Outbound:
+        • 65000: Allow VNet Outbound
+        • 65001: Allow Internet Outbound
+        • 65500: Deny All Other Outbound" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFC83D;strokeColor=#d1a000;strokeWidth=1;strokeDashArray=5 5;" vertex="1" parent="24">
+      <mxGeometry x="50" y="50" width="350" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Route Table Configuration -->
+    <mxCell id="26" value="🛣️ Route Table Configuration:
+        • rt-default-enterpriseservices-gen-qa-ue-01 (0.0.0.0/0) → Internet
+        • rt-rfc1918-10-8-enterpriseservices-gen-qa-ue-01 (10.0.0.0/8) → Virtual appliance (10.175.11.4)
+        • rt-rfc1918-172-16-12-enterpriseservices-gen-qa-ue-01 (172.16.0.0/12) → Virtual appliance (10.175.11.4)
+        • rt-rfc1918-192-168-16-enterpriseservices-gen-qa-ue-01 (192.168.0.0/16) → Virtual appliance (10.175.11.4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFC83D;strokeColor=#d1a000;strokeWidth=1;strokeDashArray=5 5;" vertex="1" parent="24">
+      <mxGeometry x="450" y="50" width="350" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- APIM Configuration -->
+    <mxCell id="27" value="⚙️ APIM Configuration:
+        • External mode with NSG protection
+        • Premium tier with 2 capacity units
+        • System-assigned managed identity
+        • Public endpoints with required hostnames
+        • Load balancing to backends with round robin support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFC83D;strokeColor=#d1a000;strokeWidth=1;strokeDashArray=5 5;" vertex="1" parent="24">
+      <mxGeometry x="850" y="50" width="350" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Implementation Notes -->
+    <mxCell id="28" value="📝 Implementation Notes:
+        • Ingress into APIM must run through Akamai
+        • Ingress access control to external APIM managed with NSG
+        • For inbound rules: create IP group called ipgrp-apimexthosts-ue-np and replace internet as source
+        • For outbound rules: add RFC1918 rules and deny all after" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFC83D;strokeColor=#d1a000;strokeWidth=1;strokeDashArray=5 5;" vertex="1" parent="24">
+      <mxGeometry x="1250" y="50" width="350" height="200" as="geometry" />
+    </mxCell>
+
+    <!-- Connectors (Flows) -->
+    <!-- 1. DNS Resolution Flow (red dotted) -->
+    <mxCell id="29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#FF0000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="4" target="8">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="250" y="280" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 2. Client Request (purple dotted) -->
+    <mxCell id="30" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#800080;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="4" target="3">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="175" y="280" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 3. External proxied connection -->
+    <mxCell id="31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="3" target="6">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="250" y="180" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 4. WAF-filtered traffic -->
+    <mxCell id="32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="7" target="13">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="400" y="230" />
+          <mxPoint x="550" y="230" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 5. Load balanced traffic -->
+    <mxCell id="33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="13" target="14">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="200" y="330" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 6. Route to APIM -->
+    <mxCell id="34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="14" target="12">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="200" y="230" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Traffic filtered by NSG -->
+    <mxCell id="35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="12" target="15">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="350" y="130" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Routes defined in Route Table -->
+    <mxCell id="36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="15" target="16">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="350" y="230" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 7. Internal proxied connection (green dotted) -->
+    <mxCell id="37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#008000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="12" target="21">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="700" y="330" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- 8. Access backend services -->
+    <mxCell id="38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="21" target="21">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="750" y="430" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Peered connection (External VNet to VNet Hub) -->
+    <mxCell id="39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="10" target="17">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="800" y="150" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Peered connection (Resource Subnets to VNet Hub) -->
+    <mxCell id="40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="20" target="17">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="800" y="400" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ExpressRoute connection -->
+    <mxCell id="41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="17" target="22">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1250" y="130" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Inspects traffic between zones -->
+    <mxCell id="42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;strokeColor=#000000;strokeWidth=2;strokeDashArray=5 5;" edge="1" parent="1" source="19" target="17">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="650" y="230" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
